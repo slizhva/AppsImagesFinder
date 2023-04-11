@@ -20,6 +20,16 @@
         <div class="row">
             <div class="col-md-12">
 
+                @if (!empty($searches))
+                    <h5 class="text-bg-warning p-3">Previous search is not finished!</h5>
+                    <form class="mb-4" method="POST" action="{{ route('images.find') }}" >
+                        {{ csrf_field() }}
+                        <input type="hidden" name="continue" value="1">
+                        <input type="submit" value="Continue" class="col-md-3">
+                    </form>
+                    <hr>
+                @endif
+
                 <strong>---Find images:---</strong>
                 <form method="POST" action="{{ route('images.find') }}" >
                     {{ csrf_field() }}

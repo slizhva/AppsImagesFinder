@@ -24,7 +24,11 @@
 
                 <hr>
 
-                <h2 class="d-block text-center w-100 fw-bold">{{ $name }}</h2>
+                <h2 class="d-flex justify-content-between w-100 fw-bold">
+                    <span>{{ $code }}</span><span>|</span>
+                    <span>{{ $name }}</span><span>|</span>
+                    <span>{{ $search }}</span>
+                </h2>
 
                 <hr>
 
@@ -36,6 +40,11 @@
                             <input class="submit-img" type="image" name="submit" src="{{ $image['thumb'] }}" alt="Submit" />
                         </form>
                     @endforeach
+                    <form class="col-md-3 mb-3" method="POST" action="{{ route('images.find') }}" >
+                        {{ csrf_field() }}
+                        <input type="hidden" name="selected_image_url" value="https://placehold.co/400x400/png">
+                        <input class="submit-img" type="image" name="submit" src="https://placehold.co/400x400/png" alt="Submit" />
+                    </form>
                 </div>
 
             </div>

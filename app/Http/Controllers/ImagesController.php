@@ -17,11 +17,17 @@ class ImagesController extends Controller
 
     public function index():Renderable
     {
-        return view('pages.images');
+        return view('pages.images', [
+            'searches' => Session::get('searches')
+        ]);
     }
 
     public function find(Request $request):Renderable|RedirectResponse
     {
+        if (!empty($request->get('continue'))) {
+            Session::decrement('search_number');
+        }
+
         if (!empty($request->get('search'))) {
             $searches = preg_split("/\r\n|\n|\r/", $request->get('search'));
             Session::put('searches', $searches);
@@ -57,10 +63,13 @@ class ImagesController extends Controller
         }
 
         $explodedSearch = explode('|', $searches[$searchNumber]);
-        if (count($explodedSearch) === 2) {
+        if (count($explodedSearch) === 3) {
+            [$code ,$name, $search] = $explodedSearch;
+        } elseif (count($explodedSearch) === 2) {
             [$name, $search] = $explodedSearch;
+            $code = $name;
         } else {
-            $name = $search = $explodedSearch[0];
+            $code = $name = $search = $explodedSearch[0];
         }
 
         $page = 1;
@@ -84,7 +93,9 @@ class ImagesController extends Controller
         return view('pages.select_image', [
             'searchNumber' => $searchNumber,
             'searchCount' => $searchesCount,
+            'code' => $code,
             'name' => $name,
+            'search' => $search,
             'images' => $images,
         ]);
     }
